@@ -12,7 +12,8 @@ from .config import settings
 from .db import get_db
 from .models import User
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Argon2 is robust and avoids bcrypt wheel/backend edge-cases on Windows.
+pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 
 

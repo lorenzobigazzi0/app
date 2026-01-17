@@ -10,7 +10,10 @@ dependencies = [
   "asyncpg>=0.29",
   "pydantic>=2.7",
   "python-jose[cryptography]>=3.3",
-  "passlib[bcrypt]>=1.7.4",
+  # NOTE: on Windows, passlib+bcrypt can hit backend/metadata issues depending on bcrypt wheels.
+  # We use Argon2 (argon2-cffi) for a stable, modern password hash.
+  "passlib[argon2]>=1.7.4",
+  "argon2-cffi>=23.1.0",
   "python-multipart>=0.0.9",
 ]
 

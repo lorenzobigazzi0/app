@@ -6,7 +6,8 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from .config import settings
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Keep in sync with app/security.py
+pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 security = HTTPBearer(auto_error=False)
 
 

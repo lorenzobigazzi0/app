@@ -22,7 +22,7 @@ source .venv/bin/activate
 pip install -U pip
 pip install -e .
 
-export DATABASE_URL='postgresql+asyncpg://cassa:cassa@localhost:5432/cassa'
+export DATABASE_URL='postgresql+asyncpg://cassa:postgres@localhost:5432/cassa'
 export JWT_SECRET='dev-secret'
 
 uvicorn app.main:app --host 0.0.0.0 --port 8010 --reload
@@ -40,10 +40,25 @@ Poi apri:
 - Bar: `bar/1234`
 - Admin: `admin/admin`
 
+### Permessi schema `public` (errore "permesso negato per lo schema public")
+
+Se in avvio vedi:
+
+```
+permesso negato per lo schema public
+```
+
+significa che il ruolo applicativo non puo' creare tabelle/tipi.
+Esegui (come utente postgres) lo script:
+
+```bash
+psql -U postgres -d cassa -f backend/scripts/db_bootstrap.sql -v app_user=cassa
+```
+
 ## Realtime
 - Login -> ricevi JWT
 - WebSocket: `ws://localhost:8010/ws?token=<JWT>`
-- Eventi push: `ticket.created`, `ticket.updated`, `call.created`, `printjob.updated`
+- Eventi push (WS): `order_created`, `order_updated`, `call_created`, `call_acked`, `print_job`
 
 ## Nota stampa
 Il modulo `printing.py` è uno **stub**. Ti ho lasciato i punti per integrare:

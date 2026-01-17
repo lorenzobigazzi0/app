@@ -2,7 +2,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .models import User, Table, Printer
-from .auth import hash_password
+from .security import hash_password
 
 async def seed_if_empty(db: AsyncSession) -> None:
     # Users
