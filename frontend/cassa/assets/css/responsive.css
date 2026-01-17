@@ -1,0 +1,5 @@
+@media (max-width: 1100px){
+	.calendar-grid{ grid-template-columns: 1fr; }
+	.calendar-left, .calendar-right{ min-height: unset; }
+	.header-right{ min-width: 0; }
+}

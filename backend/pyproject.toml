@@ -1,0 +1,18 @@
+[project]
+name = "cassa-realtime"
+version = "0.1.0"
+description = "Realtime backend for cassa/bar/cameriere"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.111",
+  "uvicorn[standard]>=0.30",
+  "sqlalchemy[asyncio]>=2.0",
+  "asyncpg>=0.29",
+  "pydantic>=2.7",
+  "python-jose[cryptography]>=3.3",
+  "passlib[bcrypt]>=1.7.4",
+  "python-multipart>=0.0.9",
+]
+
+[tool.uvicorn]
+factory = false

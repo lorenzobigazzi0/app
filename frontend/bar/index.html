@@ -1,0 +1,167 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="it">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title>Bar Station Interface V2.2</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+	<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+	<header>
+		<div class="station-status-wrapper">
+			<span class="station-label">POSTAZIONE</span>
+			<label class="toggle-switch">
+				<input type="checkbox" class="toggle-checkbox" checked id="stationToggle">
+				<span class="toggle-slider">
+					<i class="fa-solid fa-play icon-play"></i>
+					<i class="fa-solid fa-pause icon-pause"></i>
+				</span>
+			</label>
+		</div>
+
+		<div class="header-center">
+			<div class="date-display"><span id="dateText">—</span></div>
+			<div class="time-display"><span id="timeText">—</span></div>
+		</div>
+
+		<div class="header-right">
+			<div class="system-pill" id="systemPill"><div class="blink-dot" id="systemDot"></div><span id="systemText">ONLINE</span></div>
+
+			<div class="station-selector" onclick="openStationModal()">
+				<span class="ss-label">POSTAZIONE ATTIVA</span>
+				<span class="ss-value"><span id="stationValue">BAR PRINCIPALE</span> <i class="fa-solid fa-caret-down"></i></span>
+			</div>
+
+			<div class="user-profile" onclick="openUserModal()">
+				<div class="avatar-circle" id="avatarCircle">MR</div>
+				<div class="user-info">
+					<span class="user-name" id="userNameText">Guest</span>
+					<span class="user-role" id="userRoleText">Non autenticato</span>
+				</div>
+			</div>
+
+			<label class="theme-switch" title="Tema chiaro/scuro">
+				<input type="checkbox" class="theme-checkbox" id="darkToggle">
+				<span class="theme-slider">
+					<i class="fa-solid fa-moon icon-moon"></i>
+					<i class="fa-solid fa-sun icon-sun"></i>
+				</span>
+			</label>
+
+			<button class="logout-btn" title="Logout" onclick="doLogout()">
+				<i class="fa-solid fa-right-from-bracket fa-lg"></i>
+			</button>
+		</div>
+	</header>
+
+	<div id="pauseOverlay" class="pause-overlay" aria-hidden="true">
+		<div class="pause-card">
+			<div class="pause-title"><i class="fa-solid fa-circle-pause"></i> Postazione in pausa</div>
+			<div class="pause-sub">La postazione è disabilitata. Riattivala dallo switch in alto.</div>
+		</div>
+	</div>
+
+	<main>
+		<div class="sidebar" id="ordersSidebar"></div>
+
+		<div class="detail-view">
+			<div class="detail-header" id="detailHeader">
+				<div>
+					<span style="color:var(--text-secondary); font-size:0.9rem; font-weight:800;">TAVOLO</span><br>
+					<span style="font-size:1.5rem; font-weight:950;" id="dTable">—</span>
+				</div>
+				<div>
+					<span style="color:var(--text-secondary); font-size:0.9rem; font-weight:800;">CAMERIERE</span><br>
+					<span id="dWaiter">—</span>
+				</div>
+				<div>
+					<span style="color:var(--text-secondary); font-size:0.9rem; font-weight:800;">COMANDA</span><br>
+					<span id="dOrder">—</span>
+				</div>
+				<div>
+					<span style="color:var(--text-secondary); font-size:0.9rem; font-weight:800;">TIMER</span><br>
+					<span style="color:#d32f2f;" id="dTimer">—</span>
+				</div>
+			</div>
+
+			<div class="item-list" id="itemList">
+				<div style="color:var(--text-secondary); font-weight:850; padding:10px 0;">Seleziona una comanda a sinistra.</div>
+			</div>
+
+			<div class="summary-section">
+				<div class="stats-row">
+					<span>COPERTI: <span id="sCovers">—</span></span>
+					<span>APERICENA: <span id="sAperi">—</span></span>
+					<span>ARTICOLI: <span id="sItems">—</span></span>
+				</div>
+				<div class="notes-box" id="sNotes" style="display:none;">
+					<strong>NOTE:</strong> <span id="sNotesText"></span>
+				</div>
+			</div>
+
+			<div class="action-bar">
+				<button class="btn btn-call" id="btnCall"><i class="fa-regular fa-bell"></i> CAMERIERE</button>
+				<button class="btn btn-print" id="btnPrint"><i class="fa-solid fa-print"></i> STAMPA</button>
+				<button class="btn btn-done" id="btnReady">PRONTA</button>
+			</div>
+		</div>
+		<div class="sidebar">
+
+				<div class="waiter-label">CHIAMA CAMERIERI</div>
+				<div id="waiterButtons" class="waiter-buttons"></div>
+
+		</div>
+	</main>
+
+	<div class="modal-backdrop" id="stationModal" role="dialog" aria-modal="true" aria-label="Selezione postazione" aria-hidden="true">
+		<div class="modal-card">
+			<div class="modal-head">
+				<div class="modal-title"><i class="fa-solid fa-store"></i> Seleziona Postazione</div>
+				<button class="modal-close" onclick="closeStationModal()" aria-label="Chiudi"><i class="fa-solid fa-xmark"></i></button>
+			</div>
+			<div class="modal-body">
+				<div class="modal-row">
+					<label class="modal-label" for="stationSelect">Postazione</label>
+					<select id="stationSelect" class="modal-select"></select>
+				</div>
+				<div class="modal-hint">Suggerimento: usa questa voce per cambiare postazione (es. Bar principale, Cocktail, Caffetteria).</div>
+			</div>
+			<div class="modal-actions">
+				<button class="modal-btn" onclick="closeStationModal()">Annulla</button>
+				<button class="modal-btn primary" onclick="applyStation()">Conferma</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal-backdrop" id="userModal" role="dialog" aria-modal="true" aria-label="Profilo utente" aria-hidden="true">
+		<div class="modal-card">
+			<div class="modal-head">
+				<div class="modal-title"><i class="fa-solid fa-user"></i> Profilo</div>
+				<button class="modal-close" onclick="closeUserModal()" aria-label="Chiudi"><i class="fa-solid fa-xmark"></i></button>
+			</div>
+			<div class="modal-body">
+				<div class="modal-row">
+					<label class="modal-label" for="loginName">Nome</label>
+					<input id="loginName" class="modal-input" placeholder="Es: Mario Rossi">
+				</div>
+				<div class="modal-row">
+					<label class="modal-label" for="loginRole">Ruolo</label>
+					<input id="loginRole" class="modal-input" placeholder="Es: Barista Senior">
+				</div>
+				<div class="modal-hint">Mockup: login/logout è locale (solo UI). Potrai collegare qui la tua API.</div>
+			</div>
+			<div class="modal-actions">
+				<button class="modal-btn primary" onclick="doLogin()">Login</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="toast" id="toast" aria-live="polite" aria-atomic="true"></div>
+
+	<script src="app.js"></script>
+</body>
+</html>

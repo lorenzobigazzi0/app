@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<title>Cash Register Interface V1.2</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+	<link rel="stylesheet" href="./assets/css/styles.css" />
+</head>
+
+<body data-theme="dark">
+	<header>
+		<div class="station-status-wrapper">
+			<span class="station-label">POSTAZIONE</span>
+
+			<label class="toggle-switch" title="Attiva/Disattiva postazione">
+				<input type="checkbox" class="toggle-checkbox" checked id="stationToggle" />
+				<span class="toggle-slider">
+					<i class="fa-solid fa-play icon-play"></i>
+					<i class="fa-solid fa-pause icon-pause"></i>
+				</span>
+			</label>
+
+			<button class="lock-btn" id="lockBtn" type="button" title="Blocca/Sblocca cassa con PIN">
+				<i class="fa-solid fa-lock-open" id="lockBtnIcon"></i>
+			</button>
+		</div>
+
+		<div class="header-center">
+			<div class="date-display"><span id="dateText">—</span></div>
+			<div class="time-display"><span id="timeText">—</span></div>
+		</div>
+
+		<div class="header-right">
+			<div class="system-pill" id="systemPill" title="Stato sistema">
+				<div class="blink-dot" id="systemDot"></div>
+				<span id="systemText">ONLINE</span>
+			</div>
+
+			<div class="station-selector" id="stationSelector" role="button" tabindex="0" aria-label="Seleziona location">
+				<span class="ss-label">LOCATION</span>
+				<span class="ss-value">
+					<span id="stationValue">CASSA PRINCIPALE</span>
+					<i class="fa-solid fa-caret-down"></i>
+				</span>
+			</div>
+
+			<div class="user-profile" id="userProfile" role="button" tabindex="0" aria-label="Profilo utente">
+				<div class="avatar-circle" id="avatarCircle">G</div>
+				<div class="user-info">
+					<span class="user-name" id="userNameText">Guest</span>
+					<span class="user-role" id="userRoleText">Non autenticato</span>
+				</div>
+			</div>
+
+			<label class="theme-switch" title="Tema chiaro/scuro">
+				<input type="checkbox" class="theme-checkbox" id="darkToggle" checked />
+				<span class="theme-slider">
+					<i class="fa-solid fa-moon icon-moon"></i>
+					<i class="fa-solid fa-sun icon-sun"></i>
+				</span>
+			</label>
+
+			<button class="logout-btn" id="logoutBtn" title="Esci">
+				<i class="fa-solid fa-right-from-bracket fa-lg"></i>
+			</button>
+		</div>
+	</header>
+
+	<!-- Overlay PAUSA -->
+	<div id="pauseOverlay" class="pause-overlay" aria-hidden="true">
+		<div class="pause-card">
+			<div class="pause-title"><i class="fa-solid fa-circle-pause"></i> Postazione in pausa</div>
+			<div class="pause-sub">La postazione è disabilitata. Riattivala dallo switch in alto.</div>
+		</div>
+	</div>
+
+	<!-- Overlay BLOCCO -->
+	<div id="lockOverlay" class="lock-overlay" aria-hidden="true">
+		<div class="lock-card">
+			<div class="lock-title"><i class="fa-solid fa-lock"></i> Cassa bloccata</div>
+			<div class="lock-sub">
+				La postazione è bloccata. Puoi solo cambiare tema o uscire.<br />
+				Premi il lucchetto per inserire il PIN e sbloccare.
+			</div>
+		</div>
+	</div>
+
+	<main class="app-shell">
+		<!-- SIDEBAR -->
+		<aside class="sidebar" aria-label="Menu principale">
+			<div class="nav-group top">
+				<button class="nav-btn" data-route="dashboard" aria-label="Dashboard">
+					<i class="fa-solid fa-chart-line"></i>
+					<span>Dashboard</span>
+				</button>
+
+				<button class="nav-btn" data-route="tavoli" aria-label="Tavoli">
+					<i class="fa-solid fa-utensils"></i>
+					<span>Tavoli</span>
+				</button>
+
+				<button class="nav-btn" data-route="banco" aria-label="Banco">
+					<i class="fa-solid fa-cash-register"></i>
+					<span>Banco</span>
+				</button>
+
+				<div class="nav-spacer" aria-hidden="true"></div>
+			</div>
+
+			<div class="nav-group bottom">
+				<button class="nav-btn" data-route="calendario" aria-label="Calendario">
+					<i class="fa-solid fa-calendar-days"></i>
+					<span>Calendario</span>
+				</button>
+
+				<button class="nav-btn" data-route="funzioni" aria-label="Funzioni RT">
+					<i class="fa-solid fa-wave-square"></i>
+					<span>Funzioni RT</span>
+				</button>
+
+				<button class="nav-btn" data-route="impostazioni" aria-label="Impostazioni">
+					<i class="fa-solid fa-gear"></i>
+					<span>Impostazioni</span>
+				</button>
+			</div>
+		</aside>
+
+		<!-- CONTENT -->
+		<section class="content" aria-label="Contenuto">
+			<!-- DASHBOARD -->
+			<div class="view" id="view-dashboard">
+				<div class="page-head">
+					<div>
+						<div class="page-title"><i class="fa-solid fa-chart-line"></i>Dashboard</div>
+						<div class="page-sub">Placeholder.</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-title">Dashboard</div>
+					<div class="card-sub">Placeholder.</div>
+				</div>
+			</div>
+
+			<!-- TAVOLI -->
+			<div class="view" id="view-tavoli" hidden>
+				<div class="page-head">
+					<div>
+						<div class="page-title"><i class="fa-solid fa-utensils"></i>Tavoli</div>
+						<div class="page-sub">Placeholder.</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-title">Tavoli</div>
+					<div class="card-sub">Placeholder.</div>
+				</div>
+			</div>
+
+			<!-- BANCO -->
+			<div class="view" id="view-banco" hidden>
+				<div class="page-head">
+					<div>
+						<div class="page-title"><i class="fa-solid fa-cash-register"></i>Banco</div>
+						<div class="page-sub">Placeholder.</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-title">Banco</div>
+					<div class="card-sub">Placeholder.</div>
+				</div>
+			</div>
+
+			<!-- CALENDARIO -->
+			<div class="view" id="view-calendario" hidden>
+				<div class="page-head">
+					<div class="page-title"><i class="fa-solid fa-calendar-days"></i>Calendario</div>
+
+					<div class="page-actions">
+						<button class="btn small" id="btnToday" type="button">
+							<i class="fa-regular fa-circle-dot"></i> Oggi
+						</button>
+						<button class="btn small primary" id="btnNewEvent" type="button">
+							<i class="fa-solid fa-plus"></i> Nuovo evento
+						</button>
+					</div>
+				</div>
+
+				<div class="calendar-grid">
+					<div class="card calendar-left">
+						<div class="cal-head">
+							<button class="icon-btn" id="btnPrevMonth" type="button" title="Mese precedente">
+								<i class="fa-solid fa-chevron-left"></i>
+							</button>
+							<div class="cal-month" id="calMonthTitle">—</div>
+							<button class="icon-btn" id="btnNextMonth" type="button" title="Mese successivo">
+								<i class="fa-solid fa-chevron-right"></i>
+							</button>
+						</div>
+
+						<div class="cal-weekdays">
+							<div>Lun</div><div>Mar</div><div>Mer</div><div>Gio</div><div>Ven</div><div>Sab</div><div>Dom</div>
+						</div>
+
+						<div class="cal-days" id="calDays"></div>
+					</div>
+
+					<div class="card calendar-right">
+						<div class="day-head">
+							<div class="day-title" id="dayTitle">—</div>
+							<div class="day-meta" id="dayMeta">—</div>
+						</div>
+
+						<div class="day-actions">
+							<button class="btn tiny" id="btnAddForDay" type="button">
+								<i class="fa-solid fa-plus"></i> Aggiungi evento a questo giorno
+							</button>
+						</div>
+
+						<div class="events-wrap" id="eventsWrap">
+							<div class="empty-state" id="eventsEmpty">
+								<i class="fa-regular fa-calendar-xmark"></i>
+								<div class="empty-title">Nessun appuntamento per questo giorno.</div>
+								<div class="empty-sub">Premi “Aggiungi evento” per inserirne uno.</div>
+							</div>
+							<div class="events-list" id="eventsList" hidden></div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- FUNZIONI -->
+			<div class="view" id="view-funzioni" hidden>
+				<div class="page-head">
+					<div>
+						<div class="page-title"><i class="fa-solid fa-wave-square"></i>Funzioni RT</div>
+						<div class="page-sub">Placeholder.</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-title">Funzioni RT</div>
+					<div class="card-sub">Placeholder.</div>
+				</div>
+			</div>
+
+			<!-- IMPOSTAZIONI -->
+			<div class="view" id="view-impostazioni" hidden>
+				<div class="page-head">
+					<div>
+						<div class="page-title"><i class="fa-solid fa-gear"></i>Impostazioni</div>
+						<div class="page-sub">Placeholder.</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-title">Impostazioni</div>
+					<div class="card-sub">Placeholder.</div>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<!-- MODAL LOCATION -->
+	<div class="modal-backdrop" id="stationModal" role="dialog" aria-modal="true" aria-label="Selezione location" aria-hidden="true">
+		<div class="modal-card">
+			<div class="modal-head">
+				<div class="modal-title"><i class="fa-solid fa-store"></i> Seleziona Location</div>
+				<button class="modal-close" id="btnCloseStationModal" type="button" aria-label="Chiudi">
+					<i class="fa-solid fa-xmark"></i>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="modal-row">
+					<label class="modal-label" for="stationSelect">Location</label>
+					<select id="stationSelect" class="modal-select"></select>
+				</div>
+				<div class="modal-hint">Usa questa voce per cambiare la location della cassa.</div>
+			</div>
+			<div class="modal-actions">
+				<button class="modal-btn" id="btnCancelStation" type="button">Annulla</button>
+				<button class="modal-btn primary" id="btnApplyStation" type="button">Conferma</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- MODAL UTENTE -->
+	<div class="modal-backdrop" id="userModal" role="dialog" aria-modal="true" aria-label="Profilo utente" aria-hidden="true">
+		<div class="modal-card">
+			<div class="modal-head">
+				<div class="modal-title"><i class="fa-solid fa-user"></i> Profilo</div>
+				<button class="modal-close" id="btnCloseUserModal" type="button" aria-label="Chiudi">
+					<i class="fa-solid fa-xmark"></i>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="modal-row">
+					<label class="modal-label" for="loginName">Nome</label>
+					<input id="loginName" class="modal-input" placeholder="Es: Mario Rossi" autocomplete="off" />
+				</div>
+				<div class="modal-row">
+					<label class="modal-label" for="loginRole">Ruolo</label>
+					<input id="loginRole" class="modal-input" placeholder="Es: Cassiere" autocomplete="off" />
+				</div>
+				<div class="modal-hint">Mockup: login locale (solo UI). Potrai collegare qui la tua API.</div>
+			</div>
+			<div class="modal-actions">
+				<button class="modal-btn primary" id="btnDoLogin" type="button">Login</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- MODAL PIN -->
+	<div class="pin-backdrop" id="pinModal" role="dialog" aria-modal="true" aria-label="Inserisci PIN" aria-hidden="true">
+		<div class="pin-card" role="document">
+			<div class="pin-head">
+				<div class="pin-icon" id="pinIcon"><i class="fa-solid fa-lock"></i></div>
+				<div class="pin-title" id="pinTitle">Inserisci PIN</div>
+				<div class="pin-sub" id="pinSub">PIN richiesto per continuare</div>
+			</div>
+
+			<div class="pin-dots" id="pinDots" aria-label="PIN inserito">
+				<span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+			</div>
+
+			<div class="pin-pad" id="pinPad">
+				<button class="pin-key" type="button" data-key="1">1</button>
+				<button class="pin-key" type="button" data-key="2">2</button>
+				<button class="pin-key" type="button" data-key="3">3</button>
+
+				<button class="pin-key" type="button" data-key="4">4</button>
+				<button class="pin-key" type="button" data-key="5">5</button>
+				<button class="pin-key" type="button" data-key="6">6</button>
+
+				<button class="pin-key" type="button" data-key="7">7</button>
+				<button class="pin-key" type="button" data-key="8">8</button>
+				<button class="pin-key" type="button" data-key="9">9</button>
+
+				<button class="pin-key ghost" type="button" id="pinCancelBtn">Annulla</button>
+				<button class="pin-key" type="button" data-key="0">0</button>
+				<button class="pin-key ghost" type="button" id="pinBackBtn" aria-label="Cancella">
+					<i class="fa-solid fa-delete-left"></i>
+				</button>
+			</div>
+
+			<div class="pin-footer">
+				<div class="pin-hint" id="pinHint">PIN di default: <strong>0000</strong></div>
+			</div>
+		</div>
+	</div>
+
+	<!-- MODAL CONFERMA -->
+	<div class="confirm-backdrop" id="confirmModal" role="dialog" aria-modal="true" aria-label="Conferma" aria-hidden="true">
+		<div class="confirm-card" role="document">
+			<div class="confirm-title" id="confirmTitle">Conferma</div>
+			<div class="confirm-sub" id="confirmSub">—</div>
+			<div class="confirm-actions">
+				<button class="modal-btn" id="confirmNoBtn" type="button">Annulla</button>
+				<button class="modal-btn danger" id="confirmYesBtn" type="button">Conferma</button>
+			</div>
+		</div>
+	</div>
+
+<!-- MODAL EVENTO (AGGIORNATO) -->
+<div class="modal-backdrop" id="eventModal" role="dialog" aria-modal="true" aria-label="Evento calendario" aria-hidden="true">
+	<div class="modal-card">
+		<div class="modal-head">
+			<div class="modal-title">
+				<i class="fa-solid fa-calendar-plus"></i>
+				<span id="eventModalTitle">Nuovo evento</span>
+			</div>
+			<button class="modal-close" id="btnCloseEventModal" type="button" aria-label="Chiudi">
+				<i class="fa-solid fa-xmark"></i>
+			</button>
+		</div>
+
+		<div class="modal-body">
+			<div class="modal-row">
+				<label class="modal-label" for="evTitle">Titolo</label>
+				<input id="evTitle" class="modal-input" placeholder="Es: Consegna vino" autocomplete="off" />
+			</div>
+
+			<div class="modal-row grid2">
+				<div>
+					<label class="modal-label" for="evDate">Data</label>
+					<input id="evDate" type="date" class="modal-input" />
+				</div>
+				<div class="row-switch">
+					<label class="switch-line" for="evAllDay">
+						<input id="evAllDay" type="checkbox" />
+						<span>Tutto il giorno</span>
+					</label>
+				</div>
+			</div>
+
+			<div class="modal-row grid2" id="evTimesRow">
+				<div>
+					<label class="modal-label" for="evStart">Da</label>
+					<input id="evStart" type="time" class="modal-input" />
+				</div>
+				<div>
+					<label class="modal-label" for="evEnd">A</label>
+					<input id="evEnd" type="time" class="modal-input" />
+				</div>
+			</div>
+
+			<div class="modal-row">
+				<label class="modal-label" for="evNotes">Note (opzionale)</label>
+				<input id="evNotes" class="modal-input" placeholder="Es: chiamare prima di arrivare" autocomplete="off" />
+			</div>
+
+			<div class="modal-sep"></div>
+
+			<div class="modal-row">
+				<div class="modal-label">Reminder (fino a 3)</div>
+				<div class="rem-grid">
+					<select id="evRem1" class="modal-select">
+						<option value="none" selected>Nessuno</option>
+						<option value="1h">1 ora prima</option>
+						<option value="2h">2 ore prima</option>
+						<option value="3h">3 ore prima</option>
+						<option value="1d">1 giorno prima</option>
+						<option value="2d">2 giorni prima</option>
+						<option value="3d">3 giorni prima</option>
+						<option value="4d">4 giorni prima</option>
+						<option value="5d">5 giorni prima</option>
+					</select>
+
+					<select id="evRem2" class="modal-select">
+						<option value="none" selected>Nessuno</option>
+						<option value="1h">1 ora prima</option>
+						<option value="2h">2 ore prima</option>
+						<option value="3h">3 ore prima</option>
+						<option value="1d">1 giorno prima</option>
+						<option value="2d">2 giorni prima</option>
+						<option value="3d">3 giorni prima</option>
+						<option value="4d">4 giorni prima</option>
+						<option value="5d">5 giorni prima</option>
+					</select>
+
+					<select id="evRem3" class="modal-select">
+						<option value="none" selected>Nessuno</option>
+						<option value="1h">1 ora prima</option>
+						<option value="2h">2 ore prima</option>
+						<option value="3h">3 ore prima</option>
+						<option value="1d">1 giorno prima</option>
+						<option value="2d">2 giorni prima</option>
+						<option value="3d">3 giorni prima</option>
+						<option value="4d">4 giorni prima</option>
+						<option value="5d">5 giorni prima</option>
+					</select>
+				</div>
+				<div class="modal-hint">Quando scatta un reminder appare una notifica che va confermata per sparire.</div>
+			</div>
+
+			<div class="modal-sep"></div>
+
+			<div class="modal-row">
+				<label class="modal-label">Allegati (PDF/PNG/JPG)</label>
+				<input id="evFiles" type="file" class="modal-input" accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg" multiple />
+				<div class="modal-hint">Mockup: gli allegati vengono salvati in locale come DataURL (attenzione a file grandi).</div>
+			</div>
+
+			<div class="modal-row">
+				<div class="att-list" id="evAttachList"></div>
+			</div>
+
+			<!-- ✅ PREVIEW IN-APP (NO window.open) -->
+			<div class="modal-row">
+				<div class="att-preview-box" id="evAttachPreview" hidden>
+					<div class="att-preview-head">
+						<div class="att-preview-title" id="evAttachPreviewTitle">—</div>
+						<button class="att-preview-close" id="evAttachPreviewClose" type="button" title="Chiudi preview">
+							<i class="fa-solid fa-xmark"></i>
+						</button>
+					</div>
+					<div class="att-preview-frame" id="evAttachPreviewFrame"></div>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal-actions">
+			<button class="modal-btn danger" id="btnDeleteEvent" type="button" hidden>
+				<i class="fa-solid fa-trash"></i> Elimina
+			</button>
+			<button class="modal-btn primary" id="btnSaveEvent" type="button">
+				<i class="fa-solid fa-check"></i> Salva
+			</button>
+		</div>
+	</div>
+</div>
+
+	<div class="toast" id="toast" aria-live="polite" aria-atomic="true"></div>
+
+	<!-- Entry JS (moduli ES6) -->
+	<script type="module" src="./assets/js/app.js"></script>
+</body>
+</html>

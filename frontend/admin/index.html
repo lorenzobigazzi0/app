@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<title>Admin • Realtime Backend</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+	<link rel="stylesheet" href="/cassa/assets/css/styles.css" />
+	<style>
+		.main-grid{display:grid;grid-template-columns: 1fr 380px;gap:16px;height:calc(100vh - 90px);}
+		.panel{background:var(--panel);border:1px solid var(--panel-border);border-radius:16px;padding:14px;overflow:auto;}
+		.panel h2{margin:0 0 10px 0;font-size:1rem;letter-spacing:.04em;}
+		.row{display:flex;gap:10px;align-items:center;}
+		.input{width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--panel-border);background:rgba(255,255,255,.04);color:var(--text-primary);}
+		.btn{padding:10px 12px;border-radius:12px;border:1px solid var(--panel-border);background:rgba(255,255,255,.06);color:var(--text-primary);cursor:pointer;font-weight:800;}
+		.badge{padding:4px 10px;border-radius:999px;border:1px solid var(--panel-border);font-weight:900;font-size:.75rem;opacity:.95;}
+		.card{border:1px solid var(--panel-border);border-radius:14px;padding:12px;margin-bottom:10px;background:rgba(255,255,255,.03);}
+		.mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;}
+	</style>
+</head>
+
+<body data-theme="dark">
+	<header>
+		<div class="station-status-wrapper">
+			<span class="station-label">BACKEND</span>
+			<div class="system-pill" id="systemPill"><div class="blink-dot" id="systemDot"></div><span id="systemText">OFFLINE</span></div>
+		</div>
+		<div class="header-center">
+			<div class="date-display"><span id="dateText">—</span></div>
+			<div class="time-display"><span id="timeText">—</span></div>
+		</div>
+		<div class="header-right">
+			<div class="user-profile">
+				<div class="avatar-circle" id="avatarCircle">A</div>
+				<div class="user-info">
+					<span class="user-name" id="userNameText">Admin</span>
+					<span class="user-role" id="userRoleText">Realtime Console</span>
+				</div>
+			</div>
+			<label class="theme-switch" title="Tema chiaro/scuro">
+				<input type="checkbox" class="theme-checkbox" id="darkToggle" checked />
+				<span class="theme-slider">
+					<i class="fa-solid fa-moon icon-moon"></i>
+					<i class="fa-solid fa-sun icon-sun"></i>
+				</span>
+			</label>
+		</div>
+	</header>
+
+	<main class="app-shell" style="padding:14px;">
+		<div class="row" style="margin-bottom:12px;">
+			<input id="username" class="input" placeholder="username" value="admin" />
+			<input id="password" class="input" placeholder="password" type="password" value="admin" />
+			<button id="btnLogin" class="btn"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
+			<span id="tokenState" class="badge">no token</span>
+		</div>
+
+		<div class="main-grid">
+			<section class="panel">
+				<h2><i class="fa-solid fa-receipt"></i> Ordini (live)</h2>
+				<div id="orders"></div>
+			</section>
+
+			<aside class="panel">
+				<h2><i class="fa-regular fa-bell"></i> Chiamate / Eventi</h2>
+				<div id="events"></div>
+			</aside>
+		</div>
+	</main>
+
+	<script src="./app.js"></script>
+</body>
+</html>

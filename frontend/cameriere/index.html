@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+	<title>Waiter Station • Mobile</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<link rel="stylesheet" href="styles.css" />
+</head>
+
+<body data-theme="light">
+
+	<!-- LOGIN SCREEN -->
+	<div id="loginScreen" class="screen login-screen">
+		<div class="login-card">
+			<div class="login-brand">
+				<div class="brand-dot"></div>
+				<div>
+					<div class="brand-title">WAITer Station</div>
+					<div class="brand-sub">Accesso cameriere</div>
+				</div>
+			</div>
+
+			<div class="login-row">
+				<label class="login-label" for="loginUser">Username</label>
+				<input id="loginUser" class="login-input" autocomplete="username" placeholder="Es: emma" />
+			</div>
+
+			<div class="login-row">
+				<label class="login-label" for="loginPass">Password</label>
+				<input id="loginPass" class="login-input" type="password" autocomplete="current-password" placeholder="••••" />
+			</div>
+
+			<button id="btnLogin" class="btn primary big">
+				<i class="fa-solid fa-right-to-bracket"></i>
+				<span>LOGIN</span>
+			</button>
+
+			<div class="login-hint">
+				Demo utenti: <b>emma/1234</b>, <b>luca/1234</b>, <b>marco/1234</b> (incasso).
+			</div>
+		</div>
+	</div>
+
+	<!-- APP SHELL -->
+	<div id="appShell" class="screen app-shell" style="display:none;">
+		<header class="topbar">
+			<button id="btnMenu" class="icon-btn" aria-label="Menu">
+				<i class="fa-solid fa-bars"></i>
+			</button>
+
+			<div class="topbar-center">
+				<div class="top-title" id="topTitle">Dashboard</div>
+				<div class="top-sub" id="topSub">—</div>
+			</div>
+
+			<button id="btnTheme" class="icon-btn" aria-label="Tema">
+				<i class="fa-solid fa-moon"></i>
+			</button>
+		</header>
+
+		<!-- Drawer -->
+		<div id="drawerBackdrop" class="drawer-backdrop" aria-hidden="true">
+			<nav id="drawer" class="drawer" aria-label="Menu laterale">
+				<div class="drawer-head">
+					<div class="avatar" id="userAvatar">G</div>
+					<div class="drawer-user">
+						<div class="drawer-name" id="userName">Guest</div>
+						<div class="drawer-role" id="userRole">—</div>
+					</div>
+					<button id="btnCloseDrawer" class="icon-btn sm" aria-label="Chiudi menu">
+						<i class="fa-solid fa-xmark"></i>
+					</button>
+				</div>
+
+				<div class="drawer-section">
+					<div class="drawer-item active" data-route="dashboard">
+						<i class="fa-solid fa-gauge-high"></i>
+						<span>Dashboard</span>
+					</div>
+					<div class="drawer-item" data-route="listino">
+						<i class="fa-solid fa-list"></i>
+						<span>Listino</span>
+					</div>
+					<div class="drawer-item" data-route="tavoli">
+						<i class="fa-solid fa-table"></i>
+						<span>Tavoli</span>
+					</div>
+					<div class="drawer-item" data-route="sessione" id="menuSessione" style="display:none;">
+						<i class="fa-solid fa-cash-register"></i>
+						<span>Sessione</span>
+					</div>
+				</div>
+
+				<div class="drawer-footer">
+					<button id="btnLogout" class="btn danger w100">
+						<i class="fa-solid fa-right-from-bracket"></i>
+						<span>LOGOUT</span>
+					</button>
+				</div>
+			</nav>
+		</div>
+
+		<main class="content">
+
+			<!-- DASHBOARD -->
+			<section id="viewDashboard" class="view">
+				<div class="cards-grid">
+					<div class="stat-card">
+						<div class="stat-top">
+							<div class="stat-label">Tavoli attivi</div>
+							<div class="stat-icon"><i class="fa-solid fa-bolt"></i></div>
+						</div>
+						<div class="stat-value" id="statActive">0</div>
+						<div class="stat-sub">Comande aperte che stai seguendo</div>
+					</div>
+
+					<div class="stat-card">
+						<div class="stat-top">
+							<div class="stat-label">Tavoli chiusi</div>
+							<div class="stat-icon"><i class="fa-solid fa-circle-check"></i></div>
+						</div>
+						<div class="stat-value" id="statClosed">0</div>
+						<div class="stat-sub">Comande chiuse nella sessione</div>
+					</div>
+
+					<div class="stat-card" id="cardRevenue" style="display:none;">
+						<div class="stat-top">
+							<div class="stat-label">Totale incasso</div>
+							<div class="stat-icon"><i class="fa-solid fa-euro-sign"></i></div>
+						</div>
+						<div class="stat-value" id="statRevenue">€ 0,00</div>
+						<div class="stat-sub">Solo se abilitato alla riscossione</div>
+					</div>
+				</div>
+
+				<div class="panel">
+					<div class="panel-title">
+						<span>Attivi (rapido)</span>
+						<button class="chip" id="btnGoTavoli">
+							<i class="fa-solid fa-arrow-right"></i> Tavoli
+						</button>
+					</div>
+					<div id="dashActiveList" class="mini-list"></div>
+				</div>
+
+				<div class="panel" id="panelCashier" style="display:none;">
+					<div class="panel-title">
+						<span>Riscossione (rapido)</span>
+						<button class="chip" id="btnGoCashier">
+							<i class="fa-solid fa-cash-register"></i> Incassa
+						</button>
+					</div>
+					<div class="panel-sub">Vedi tutte le comande aperte e incassa contanti/carta.</div>
+				</div>
+			</section>
+
+			<!-- LISTINO -->
+			<section id="viewListino" class="view" style="display:none;">
+				<div class="panel">
+					<div class="panel-title">
+						<span>Listino</span>
+						<div class="pill" id="pillListinoCount">—</div>
+					</div>
+					<div id="listinoWrap"></div>
+				</div>
+			</section>
+
+			<!-- TAVOLI -->
+			<section id="viewTavoli" class="view" style="display:none;">
+				<div class="panel">
+					<div class="panel-title">
+						<span>I miei tavoli aperti</span>
+						<button id="btnAddTable" class="fab" aria-label="Aggiungi tavolo">
+							<i class="fa-solid fa-plus"></i>
+						</button>
+					</div>
+					<div id="myTablesList" class="table-list"></div>
+				</div>
+
+				<div class="panel" id="panelAllActive" style="display:none;">
+					<div class="panel-title">
+						<span>Tutti i tavoli attivi</span>
+						<div class="pill">Incasso</div>
+					</div>
+					<div id="allActiveList" class="table-list"></div>
+				</div>
+			</section>
+
+			<!-- DETTAGLIO TAVOLO -->
+			<section id="viewTableDetail" class="view" style="display:none;">
+				<div class="panel">
+					<div class="panel-title">
+						<button id="btnBackToTavoli" class="icon-btn sm" aria-label="Indietro">
+							<i class="fa-solid fa-arrow-left"></i>
+						</button>
+						<span id="detailTitle">Tavolo</span>
+						<div class="pill" id="detailOwnerPill">—</div>
+					</div>
+
+					<div class="detail-grid">
+						<div class="field">
+							<label>Nominativo</label>
+							<input id="fName" class="input" placeholder="Es: Compleanno Anna" />
+						</div>
+
+						<div class="field two">
+							<label>Coperti</label>
+							<input id="fCovers" class="input" type="number" min="0" step="1" />
+						</div>
+
+						<div class="field two">
+							<label>Apericena</label>
+							<input id="fAperi" class="input" type="number" min="0" step="1" />
+						</div>
+
+						<div class="field">
+							<label>Note e segnalazioni</label>
+							<textarea id="fNotes" class="textarea" rows="3" placeholder="Allergie, richieste, note..."></textarea>
+						</div>
+					</div>
+
+					<div class="actions-row">
+						<button id="btnSaveMeta" class="btn secondary">
+							<i class="fa-solid fa-floppy-disk"></i>
+							<span>Salva</span>
+						</button>
+
+						<button id="btnAddItems" class="btn primary">
+							<i class="fa-solid fa-basket-shopping"></i>
+							<span>Aggiungi articoli</span>
+						</button>
+
+						<button id="btnCashout" class="btn warning" style="display:none;">
+							<i class="fa-solid fa-money-bill-wave"></i>
+							<span>Riscossione</span>
+						</button>
+					</div>
+
+					<div class="divider"></div>
+
+					<div class="panel-sub"><b>Storico ordini</b> (sempre visibile)</div>
+					<div id="orderHistory" class="history"></div>
+
+					<div class="total-bar">
+						<div class="total-label">Totale conto</div>
+						<div class="total-value" id="detailTotal">€ 0,00</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- MODALE: Selezione articoli -->
+			<div id="itemsModal" class="modal-backdrop" aria-hidden="true">
+				<div class="modal-card tall">
+					<div class="modal-head">
+						<div class="modal-title">
+							<i class="fa-solid fa-cart-plus"></i>
+							<span>Aggiungi articoli</span>
+						</div>
+						<button id="btnCloseItems" class="icon-btn sm" aria-label="Chiudi">
+							<i class="fa-solid fa-xmark"></i>
+						</button>
+					</div>
+
+					<div class="modal-body">
+						<div class="modal-hint">
+							Tocca <b>+</b> per aggiungere, <b>-</b> per rimuovere. Le quantità vengono inserite nell’ordine corrente.
+						</div>
+						<div id="itemsPicker"></div>
+					</div>
+
+					<div class="modal-actions">
+						<button id="btnCancelItems" class="btn secondary">Annulla</button>
+						<button id="btnConfirmItems" class="btn primary">Conferma</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- MODALE: Nuovo tavolo / Forzatura -->
+			<div id="tableModal" class="modal-backdrop" aria-hidden="true">
+				<div class="modal-card">
+					<div class="modal-head">
+						<div class="modal-title">
+							<i class="fa-solid fa-table"></i>
+							<span>Nuovo tavolo</span>
+						</div>
+						<button id="btnCloseTableModal" class="icon-btn sm" aria-label="Chiudi">
+							<i class="fa-solid fa-xmark"></i>
+						</button>
+					</div>
+
+					<div class="modal-body">
+						<div class="modal-row">
+							<label class="modal-label" for="newTableNum">Numero tavolo</label>
+							<input id="newTableNum" class="modal-input" type="number" min="1" step="1" placeholder="Es: 7" />
+						</div>
+						<div class="modal-row">
+							<label class="modal-label" for="newTableName">Nominativo (facoltativo)</label>
+							<input id="newTableName" class="modal-input" placeholder="Es: Compleanno Anna" />
+						</div>
+						<div class="modal-hint" id="tableModalHint">Se il tavolo risulta occupato da un altro cameriere, verrà richiesto di confermare la forzatura.</div>
+					</div>
+
+					<div class="modal-actions">
+						<button id="btnCreateTable" class="btn primary">Crea / Apri tavolo</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- MODALE: Riscossione -->
+			<div id="cashModal" class="modal-backdrop" aria-hidden="true">
+				<div class="modal-card tall">
+					<div class="modal-head">
+						<div class="modal-title">
+							<i class="fa-solid fa-cash-register"></i>
+							<span>Riscossione</span>
+						</div>
+						<button id="btnCloseCash" class="icon-btn sm" aria-label="Chiudi">
+							<i class="fa-solid fa-xmark"></i>
+						</button>
+					</div>
+
+					<div class="modal-body">
+						<div class="cash-summary">
+							<div class="cash-line"><span>Tavolo</span><b id="cashTable">—</b></div>
+							<div class="cash-line"><span>Totale</span><b id="cashTotal">€ 0,00</b></div>
+						</div>
+
+						<div class="seg">
+							<button id="payCash" class="seg-btn active"><i class="fa-solid fa-money-bill"></i> Contanti</button>
+							<button id="payCard" class="seg-btn"><i class="fa-solid fa-credit-card"></i> Carta</button>
+						</div>
+
+						<div id="cashSection">
+							<div class="modal-hint">Seleziona i tagli ricevuti. Il totale ricevuto viene calcolato automaticamente.</div>
+							<div class="denoms" id="denoms"></div>
+
+							<div class="cash-totals">
+								<div class="cash-line"><span>Ricevuto</span><b id="cashReceived">€ 0,00</b></div>
+								<div class="cash-line"><span>Resto</span><b id="cashChange">€ 0,00</b></div>
+							</div>
+
+							<button id="btnResetCash" class="btn secondary w100">
+								<i class="fa-solid fa-rotate-left"></i>
+								<span>Reset contanti</span>
+							</button>
+						</div>
+
+						<div id="cardSection" style="display:none;">
+							<div class="modal-hint">Pagamento con carta: conferma per chiudere il tavolo come “pagato”.</div>
+						</div>
+					</div>
+
+					<div class="modal-actions">
+						<button id="btnConfirmPayment" class="btn primary w100">Conferma pagamento</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- SESSIONE -->
+			<section id="viewSessione" class="view" style="display:none;">
+				<div class="panel">
+					<div class="panel-title">
+						<span>Riepilogo sessione</span>
+						<div class="pill">Incassi</div>
+					</div>
+
+					<div class="session-cards">
+						<div class="stat-card">
+							<div class="stat-top">
+								<div class="stat-label">Incasso totale</div>
+								<div class="stat-icon"><i class="fa-solid fa-euro-sign"></i></div>
+							</div>
+							<div class="stat-value" id="sessTotal">€ 0,00</div>
+							<div class="stat-sub">Somma di contanti + carta</div>
+						</div>
+
+						<div class="stat-card">
+							<div class="stat-top">
+								<div class="stat-label">Pagamenti carta</div>
+								<div class="stat-icon"><i class="fa-solid fa-credit-card"></i></div>
+							</div>
+							<div class="stat-value" id="sessCard">€ 0,00</div>
+							<div class="stat-sub">Totale pagamenti carta</div>
+						</div>
+
+						<div class="stat-card">
+							<div class="stat-top">
+								<div class="stat-label">Pagamenti contanti</div>
+								<div class="stat-icon"><i class="fa-solid fa-money-bill"></i></div>
+							</div>
+							<div class="stat-value" id="sessCash">€ 0,00</div>
+							<div class="stat-sub">Totale pagamenti contanti</div>
+						</div>
+					</div>
+
+					<div class="divider"></div>
+
+					<div class="panel-sub"><b>Storico pagamenti</b></div>
+					<div id="paymentsList" class="history"></div>
+				</div>
+			</section>
+
+		</main>
+
+		<!-- Chiamata dal BAR (Realtime) -->
+		<div id="callModal" class="call-modal" style="display:none;">
+			<div class="call-modal-card">
+				<div class="call-modal-title">CHIAMATA DAL BAR</div>
+				<div id="callModalMsg" class="call-modal-msg">—</div>
+				<div class="call-modal-actions">
+					<button id="callAckBtn" class="btn primary">OK</button>
+				</div>
+			</div>
+		</div>
+
+		<div id="toast" class="toast" aria-live="polite" aria-atomic="true"></div>
+	</div>
+
+	<script src="app.js"></script>
+</body>
+</html>

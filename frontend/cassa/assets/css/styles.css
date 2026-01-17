@@ -1,0 +1,88 @@
+@import url("./tokens.css");
+@import url("./base.css");
+@import url("./header.css");
+@import url("./layout.css");
+@import url("./sidebar.css");
+@import url("./cards-buttons.css");
+@import url("./calendar.css");
+@import url("./overlays-modals.css");
+@import url("./pin.css");
+@import url("./toast.css");
+@import url("./responsive.css");
+/* ===== Modal scroll fix ===== */
+.modal-card{
+	max-height: min(86vh, 820px);
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+}
+
+.modal-body{
+	overflow: auto;
+	-webkit-overflow-scrolling: touch;
+	min-height: 0;
+}
+
+/* Blocca scroll pagina sotto */
+body.modal-open{
+	overflow: hidden;
+}
+
+/* ===== Confirm sopra event ===== */
+.modal-backdrop.show{ z-index: 2000; }
+.confirm-backdrop.show{ z-index: 3000; }
+
+/* ===== Attach preview box ===== */
+.att-preview-box{
+	border: 1px dashed var(--border-color, #d9d9d9);
+	border-radius: 16px;
+	padding: 10px;
+	background: rgba(0,0,0,.02);
+	display:flex;
+	flex-direction:column;
+	gap: 10px;
+}
+
+.att-preview-head{
+	display:flex;
+	align-items:center;
+	justify-content:space-between;
+	gap: 10px;
+}
+
+.att-preview-title{
+	font-weight: 900;
+	overflow:hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	max-width: 72%;
+}
+
+.att-preview-close{
+	width: 38px;
+	height: 38px;
+	border-radius: 12px;
+	border: 1px solid var(--border-color, #d9d9d9);
+	background: transparent;
+	cursor:pointer;
+	display:grid;
+	place-items:center;
+}
+
+.att-preview-frame{
+	width: 100%;
+	height: min(46vh, 360px); /* ✅ dentro schermo */
+	border-radius: 12px;
+	border: 1px solid var(--border-color, #d9d9d9);
+	overflow: hidden;
+	background: rgba(0,0,0,.02);
+}
+
+.att-preview-frame img,
+.att-preview-frame iframe{
+	width: 100%;
+	height: 100%;
+	border: 0;
+	display:block;
+	object-fit: contain;
+}

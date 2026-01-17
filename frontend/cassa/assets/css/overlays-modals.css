@@ -1,0 +1,312 @@
+/* overlays-modals.css - modals, backdrops, z-index, scrolling */
+
+:root{
+	--z-modal: 2000;
+	--z-confirm: 3000;   /* sopra event modal */
+	--z-pin: 3500;       /* ancora sopra */
+	--z-toast: 5000;
+}
+
+/* -----------------------------
+   Body lock (quando un modal è aperto)
+------------------------------ */
+body.modal-open{
+	overflow: hidden;
+	touch-action: none;
+}
+
+/* -----------------------------
+   Generic modal backdrop
+------------------------------ */
+.modal-backdrop,
+.confirm-backdrop,
+.pin-backdrop{
+	position: fixed;
+	inset: 0;
+	display: none;             /* hidden by default */
+	align-items: center;
+	justify-content: center;
+	padding: 16px;
+	background: rgba(0,0,0,.45);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+}
+
+.modal-backdrop.show{ display: flex; z-index: var(--z-modal); }
+.confirm-backdrop.show{ display: flex; z-index: var(--z-confirm); }
+.pin-backdrop.show{ display: flex; z-index: var(--z-pin); }
+
+/* -----------------------------
+   Modal card
+------------------------------ */
+.modal-card{
+	width: min(640px, 96vw);
+	max-height: min(84vh, 820px);     /* IMPORTANT: limita l’altezza */
+	overflow: hidden;                 /* header/footer fissi, body scroll */
+	border-radius: 18px;
+	border: 1px solid var(--border);
+	background: var(--card-bg);
+	box-shadow: 0 18px 40px rgba(0,0,0,.22);
+	display: flex;
+	flex-direction: column;
+}
+
+/* header */
+.modal-head{
+	display:flex;
+	align-items:center;
+	justify-content:space-between;
+	gap: 12px;
+	padding: 14px 14px;
+	border-bottom: 1px solid var(--border);
+}
+
+.modal-title{
+	font-weight: 950;
+	letter-spacing: .2px;
+	display:flex;
+	align-items:center;
+	gap: 10px;
+}
+
+.modal-close{
+	width: 42px;
+	height: 42px;
+	border-radius: 12px;
+	border: 1px solid var(--border);
+	background: rgba(0,0,0,.02);
+	color: var(--text);
+	display:grid;
+	place-items:center;
+	cursor:pointer;
+}
+body[data-theme="dark"] .modal-close{ background: rgba(255,255,255,.04); }
+
+.modal-close:hover{
+	background: rgba(77,163,255,.10);
+	border-color: rgba(77,163,255,.22);
+}
+
+/* body (scrollable) */
+.modal-body{
+	padding: 14px;
+	overflow: auto;                 /* ✅ SCROLL */
+	-webkit-overflow-scrolling: touch;
+	min-height: 0;                  /* fondamentale con flex column */
+}
+
+/* footer actions */
+.modal-actions{
+	display:flex;
+	align-items:center;
+	justify-content:flex-end;
+	gap: 10px;
+	padding: 12px 14px;
+	border-top: 1px solid var(--border);
+}
+
+/* rows */
+.modal-row{ display:flex; flex-direction:column; gap: 6px; margin-bottom: 12px; }
+.modal-row.grid2{ display:grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.modal-label{ font-weight: 900; color: var(--muted); font-size: .85rem; }
+.modal-input, .modal-select{
+	width: 100%;
+	padding: 12px 12px;
+	border-radius: 14px;
+	border: 1px solid var(--border);
+	background: rgba(0,0,0,.02);
+	color: var(--text);
+	font-weight: 850;
+	outline: none;
+}
+body[data-theme="dark"] .modal-input,
+body[data-theme="dark"] .modal-select{
+	background: rgba(255,255,255,.04);
+}
+
+.modal-hint{
+	margin-top: 6px;
+	color: var(--muted);
+	font-weight: 800;
+	font-size: .85rem;
+}
+
+/* -----------------------------
+   Confirm modal
+------------------------------ */
+.confirm-card{
+	width: min(520px, 94vw);
+	border-radius: 18px;
+	border: 1px solid var(--border);
+	background: var(--card-bg);
+	box-shadow: 0 18px 40px rgba(0,0,0,.22);
+	padding: 14px;
+}
+
+.confirm-title{ font-weight: 950; font-size: 1.05rem; margin-bottom: 6px; }
+.confirm-sub{ color: var(--muted); font-weight: 850; margin-bottom: 12px; }
+.confirm-actions{ display:flex; justify-content:flex-end; gap: 10px; }
+
+/* -----------------------------
+   Attachments UI inside Event modal
+------------------------------ */
+.attachments-wrap{
+	display:flex;
+	flex-direction:column;
+	gap: 10px;
+}
+
+.attachments-head{
+	display:flex;
+	align-items:center;
+	justify-content:space-between;
+	gap: 10px;
+}
+
+.attachments-title{
+	font-weight: 950;
+	color: var(--muted);
+	font-size: .85rem;
+}
+
+.attachments-add{
+	display:flex;
+	align-items:center;
+	gap: 10px;
+	width: 100%;
+}
+
+.attachments-add input[type="file"]{
+	width: 100%;
+}
+
+.attachments-list{
+	display:flex;
+	flex-direction:column;
+	gap: 8px;
+}
+
+.attachment-item{
+	border: 1px solid var(--border);
+	border-radius: 14px;
+	padding: 10px;
+	background: rgba(0,0,0,.02);
+	display:flex;
+	align-items:center;
+	justify-content:space-between;
+	gap: 10px;
+}
+body[data-theme="dark"] .attachment-item{ background: rgba(255,255,255,.04); }
+
+.attachment-left{
+	display:flex;
+	flex-direction:column;
+	gap: 2px;
+	min-width: 0;
+}
+.attachment-name{
+	font-weight: 900;
+	white-space: nowrap;
+	overflow:hidden;
+	text-overflow: ellipsis;
+	max-width: 360px;
+}
+.attachment-meta{
+	color: var(--muted);
+	font-weight: 800;
+	font-size: .82rem;
+}
+
+.attachment-actions{
+	display:flex;
+	gap: 8px;
+	align-items:center;
+}
+
+.icon-mini-btn{
+	width: 38px;
+	height: 38px;
+	border-radius: 12px;
+	border: 1px solid var(--border);
+	background: rgba(0,0,0,.02);
+	color: var(--text);
+	cursor:pointer;
+	display:grid;
+	place-items:center;
+}
+body[data-theme="dark"] .icon-mini-btn{ background: rgba(255,255,255,.04); }
+
+.icon-mini-btn:hover{
+	background: rgba(77,163,255,.10);
+	border-color: rgba(77,163,255,.22);
+}
+
+/* Preview area: deve "stare nel telefono" */
+.attachment-preview{
+	border: 1px dashed var(--border);
+	border-radius: 16px;
+	padding: 10px;
+	background: rgba(0,0,0,.01);
+	display:flex;
+	flex-direction:column;
+	gap: 8px;
+}
+body[data-theme="dark"] .attachment-preview{ background: rgba(255,255,255,.03); }
+
+.preview-head{
+	display:flex;
+	align-items:center;
+	justify-content:space-between;
+	gap: 10px;
+}
+.preview-title{
+	font-weight: 950;
+	font-size: .9rem;
+}
+.preview-close{
+	width: 38px;
+	height: 38px;
+	border-radius: 12px;
+	border: 1px solid var(--border);
+	background: rgba(0,0,0,.02);
+	cursor:pointer;
+	display:grid;
+	place-items:center;
+}
+body[data-theme="dark"] .preview-close{ background: rgba(255,255,255,.04); }
+
+.preview-frame{
+	width: 100%;
+	height: min(46vh, 360px);   /* ✅ dentro schermo */
+	border-radius: 12px;
+	border: 1px solid var(--border);
+	overflow: hidden;
+	background: rgba(0,0,0,.02);
+}
+body[data-theme="dark"] .preview-frame{ background: rgba(255,255,255,.04); }
+
+.preview-frame iframe,
+.preview-frame img{
+	width: 100%;
+	height: 100%;
+	display:block;
+	border: 0;
+	object-fit: contain;        /* ✅ immagini non “escono” */
+}
+
+/* Tablet landscape: più margine e modali più larghi (senza spingere mobile) */
+@media (min-width: 900px) and (orientation: landscape){
+	.modal-card{
+		width: min(820px, 92vw);
+		max-height: 86vh;
+	}
+	.preview-frame{
+		height: min(56vh, 520px);
+	}
+	.att-viewer-card{
+		width: min(1100px, 92vw);
+	}
+	.att-viewer-pdf{
+		height: 74vh;
+	}
+}

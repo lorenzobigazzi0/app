@@ -1,0 +1,93 @@
+.pin-card{
+	width: min(420px, 94vw);
+	border-radius: 22px;
+	overflow:hidden;
+	background: rgba(255,255,255,.96);
+	border: 1px solid rgba(0,0,0,.10);
+	box-shadow: 0 22px 60px rgba(0,0,0,.28);
+	padding: 18px 18px 14px;
+}
+body[data-theme="dark"] .pin-card{
+	background: rgba(17,26,43,.97);
+	border-color: rgba(255,255,255,.12);
+}
+
+.pin-head{ text-align:center; margin-bottom: 12px; }
+.pin-icon{
+	width: 56px;
+	height: 56px;
+	border-radius: 18px;
+	background: rgba(77,163,255,.12);
+	border: 1px solid rgba(77,163,255,.25);
+	display:grid;
+	place-items:center;
+	margin: 0 auto 10px;
+	color: var(--blue);
+}
+body[data-theme="dark"] .pin-icon{ color: #bfe0ff; }
+
+.pin-title{
+	font-weight: 950;
+	font-size: 1.15rem;
+	letter-spacing: .2px;
+}
+.pin-sub{
+	color: var(--muted);
+	font-weight: 800;
+	margin-top: 6px;
+}
+
+.pin-dots{
+	display:flex;
+	justify-content:center;
+	gap: 10px;
+	margin: 12px 0 14px;
+}
+.dot{
+	width: 12px;
+	height: 12px;
+	border-radius: 999px;
+	background: rgba(0,0,0,.14);
+	border: 1px solid var(--border);
+}
+body[data-theme="dark"] .dot{ background: rgba(255,255,255,.18); }
+.dot.filled{
+	background: var(--blue);
+	border-color: rgba(77,163,255,.35);
+}
+
+.pin-pad{
+	display:grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 10px;
+}
+.pin-key{
+	min-height: 54px;
+	border-radius: 16px;
+	border: 1px solid var(--border);
+	background: rgba(0,0,0,.03);
+	color: var(--text);
+	font-weight: 950;
+	font-size: 1.05rem;
+	cursor:pointer;
+	display:grid;
+	place-items:center;
+	transition: transform .08s, background .18s, border-color .18s;
+}
+body[data-theme="dark"] .pin-key{
+	background: rgba(255,255,255,.06);
+	color: var(--text);
+}
+.pin-key:hover{
+	background: rgba(77,163,255,.12);
+	border-color: rgba(77,163,255,.28);
+}
+.pin-key:active{ transform: scale(.98); }
+
+.pin-key.ghost{
+	background: transparent;
+	border-style: dashed;
+	color: var(--muted);
+}
+.pin-footer{ margin-top: 12px; text-align:center; }
+.pin-hint{ color: var(--muted); font-weight: 850; }

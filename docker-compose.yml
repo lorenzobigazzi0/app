@@ -1,0 +1,24 @@
+services:
+	postgres:
+		image: postgres:16
+		environment:
+			POSTGRES_DB: cassa
+			POSTGRES_USER: cassa
+			POSTGRES_PASSWORD: cassa
+		ports:
+			- "5432:5432"
+		volumes:
+			- pgdata:/var/lib/postgresql/data
+	backend:
+		build:
+			context: ./backend
+		environment:
+			DATABASE_URL: postgresql+asyncpg://cassa:cassa@postgres:5432/cassa
+			JWT_SECRET: change-me
+		ports:
+			- "8010:8010"
+		depends_on:
+			- postgres
+
+volumes:
+	pgdata:

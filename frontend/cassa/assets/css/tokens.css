@@ -1,0 +1,52 @@
+:root{
+	/* Base */
+	--bg: #f4f6f8;
+	--card: #ffffff;
+	--text: #243244;
+	--muted: #6c7a8a;
+	--border: rgba(0,0,0,.10);
+
+	--blue: #0056b3;
+	--green: #27ae60;
+	--orange: #ffb020;
+	--red: #e74c3c;
+
+	--shadow: 0 10px 28px rgba(0,0,0,.10);
+
+	--tap: 48px;
+	--radius: 16px;
+
+	/* Layout */
+	--header-h: 72px;
+	--sidebar-w: 112px;
+	--pad: 16px;
+
+	/* Calendario */
+	--cal-left-w: 420px;
+	--cal-right-min: 520px;
+	--cal-card-min-h: 560px;
+
+	/* Lock button contrast */
+	--lock-bg: rgba(0,0,0,.04);
+	--lock-border: rgba(0,0,0,.10);
+	--lock-ink: #243244;
+}
+
+/* Dark theme */
+body[data-theme="dark"]{
+	--bg: #0b1220;
+	--card: #111a2b;
+	--text: #e6edf7;
+	--muted: #a8b3c7;
+	--border: rgba(255,255,255,.10);
+
+	--blue: #4da3ff;
+	--green: #2bd36f;
+
+	--shadow: 0 16px 36px rgba(0,0,0,.45);
+
+	/* Lock button: più contrasto in dark */
+	--lock-bg: rgba(255,255,255,.08);
+	--lock-border: rgba(255,255,255,.16);
+	--lock-ink: #e6edf7;
+}
